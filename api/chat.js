@@ -15,20 +15,26 @@ export default async function handler(req, res) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: message }] }],
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: message }]
+            }
+          ]
         }),
       }
     );
 
     const data = await response.json();
+    console.log("Gemini raw response:", JSON.stringify(data, null, 2)); // 👀
+
     const reply =
       data?.candidates?.[0]?.content?.parts?.[0]?.text ||
       "I don’t know what to say.";
 
     res.status(200).json({ reply });
   } catch (err) {
-    console.error(err);
+    console.error("Proxy error:", err);
     res.status(500).json({ reply: "Error talking to Gemini." });
   }
 }
-
