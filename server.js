@@ -4,7 +4,6 @@ import fetch from "node-fetch";
 const app = express();
 app.use(express.json());
 
-// Use an environment variable so your API key is safe
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 app.post("/chat", async (req, res) => {
@@ -23,7 +22,9 @@ app.post("/chat", async (req, res) => {
     );
 
     const data = await response.json();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Hmm... I don’t know what to say.";
+    const reply =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "Hmm... I don’t know what to say.";
 
     res.json({ reply });
   } catch (err) {
@@ -32,5 +33,5 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-// Vercel will override the port anyway
-app.listen(3000, () => console.log("Proxy running on port 3000"));
+export default app;
+
